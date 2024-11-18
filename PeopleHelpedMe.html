@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Who Helped Me</title>
+    <style>
+        body {
+            background-color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .Title {
+            color: white;
+            text-align: center;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin: 40px 0;
+            text-shadow: 
+                0 0 10px rgba(255,255,255,0.5),
+                0 0 20px rgba(255,255,255,0.3),
+                0 0 30px rgba(255,255,255,0.2);
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .PersonCard {
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .PersonName {
+            color: goldenrod;
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .PersonDescription {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .HelpList {
+            color: #DDD;
+            margin-left: 40px;
+        }
+
+        .HelpList li {
+            margin: 10px 0;
+        }
+
+        .PersonCard:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .BackButton {
+            display: block;
+            width: fit-content;
+            margin: 30px auto;
+            padding: 10px 20px;
+            background-color: #1E1E1E;
+            color: goldenrod;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .BackButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1 class="Title">People Who Helped Me</h1>
+
+    <div class="PersonCard">
+        <h2 class="PersonName">John Developer</h2>
+        <p class="PersonDescription">Senior Game Developer & Mentor</p>
+        <ol class="HelpList">
+            <li>Helped debug critical game physics issues</li>
+            <li>Taught me advanced Godot techniques</li>
+            <li>Code review for Space Invaders game</li>
+        </ol>
+    </div>
+
+    <div class="PersonCard">
+        <h2 class="PersonName">Sarah CodeMaster</h2>
+        <p class="PersonDescription">UI/UX Specialist</p>
+        <ol class="HelpList">
+            <li>Designed the website layout</li>
+            <li>Taught me CSS animations</li>
+            <li>Helped with responsive design</li>
+        </ol>
+    </div>
+
+    <div class="PersonCard">
+        <h2 class="PersonName">Mike GameArtist</h2>
+        <p class="PersonDescription">Game Artist & Designer</p>
+        <ol class="HelpList">
+            <li>Created game assets</li>
+            <li>Taught me pixel art basics</li>
+            <li>Helped with game visual effects</li>
+        </ol>
+    </div>
+
+    <a href="index.html" class="BackButton">Back to Home</a>
+</body>
+</html>

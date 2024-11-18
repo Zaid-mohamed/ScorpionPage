@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="SimpleGame.css">
+    <style>
+        #gameCanvas {
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            background: #2d2d2d;
+        }
+        #score {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(255, 215, 0, 0.3);
+        }
+        .hint-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .hint-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(10px);
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    
+    <button id="hint" class="Link" onclick="showHint()">Show Hints</button>
+    <div id="hintPanel" style="display: none; background: rgba(45, 45, 45, 0.95); padding: 20px; border-radius: 10px; margin: 20px; color: white; border: 2px solid rgba(255, 215, 0, 0.3);">
+        <h3 style="margin-top: 0;">How to Play Snake:</h3>
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li class="hint-item" onclick="demonstrateControls()">1. Use the arrow keys (←↑→↓) to guide your snake around the board</li>
+            <li class="hint-item" onclick="demonstrateFood()">2. Collect the red food pellets to grow longer and earn 10 points each</li>
+            <li class="hint-item" onclick="demonstrateCollision()">3. Be careful! Hitting the walls or your own tail ends the game</li>
+            <li class="hint-item" onclick="demonstrateTurning()">4. Plan your moves carefully - your snake can't turn 180 degrees instantly</li>
+            <li class="hint-item" onclick="showHighScore()">5. Try to beat your high score and challenge your friends!</li>
+        </ul>
+        <button class="Link" style="margin: 10px 0 0 0;" onclick="hideHint()">Close</button>
+    </div>
+
+    <script>
+        function showHint() {
+            document.getElementById('hintPanel').style.display = 'block';
+        }
+        
+        function hideHint() {
+            document.getElementById('hintPanel').style.display = 'none';
+        }
+
+        function demonstrateControls() {
+            alert("Use ← to go left\nUse ↑ to go up\nUse → to go right\nUse ↓ to go down");
+        }
+
+        function demonstrateFood() {
+            alert("Each food pellet is worth 10 points!\nYour snake will grow longer with each pellet eaten.");
+        }
+
+        function demonstrateCollision() {
+            alert("Game ends if you:\n- Hit the walls\n- Run into your own tail\nBe careful and plan your route!");
+        }
+
+        function demonstrateTurning() {
+            alert("You cannot make a 180° turn!\nFor example, if going right, you cannot immediately go left.");
+        }
+
+        function showHighScore() {
+            const highScore = localStorage.getItem('snakeHighScore') || 0;
+            alert(`Current High Score: ${highScore}\nCan you beat it?`);
+        }
+    </script>
+    <h1>Snake Game</h1>
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <button id="reset" onclick="resetGame()">Reset Game</button>
+    <a href="index.html" class="Link">Back to Home</a>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+        
+        let snake = [
+            {x: 10, y: 10}
+        ];
+        let food = {x: 15, y: 15};
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let gameLoop;
+        
+        document.addEventListener('keydown', changeDirection);
+        
+        function changeDirection(event) {
+            const LEFT_KEY = 37;
+            const RIGHT_KEY = 39;
+            const UP_KEY = 38;
+            const DOWN_KEY = 40;
+            
+            const keyPressed = event.keyCode;
+            const goingUp = dy === -1;
+            const goingDown = dy === 1;
+            const goingRight = dx === 1;
+            const goingLeft = dx === -1;
+            
+            if (keyPressed === LEFT_KEY && !goingRight) {
+                dx = -1;
+                dy = 0;
+            }
+            if (keyPressed === UP_KEY && !goingDown) {
+                dx = 0;
+                dy = -1;
+            }
+            if (keyPressed === RIGHT_KEY && !goingLeft) {
+                dx = 1;
+                dy = 0;
+            }
+            if (keyPressed === DOWN_KEY && !goingUp) {
+                dx = 0;
+                dy = 1;
+            }
+        }
+        
+        function drawGame() {
+            clearCanvas();
+            moveSnake();
+            
+            if (hasGameEnded()) {
+                clearInterval(gameLoop);
+                ctx.fillStyle = 'white';
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Game Over!', canvas.width/2, canvas.height/2);
+                return;
+            }
+            
+            checkFoodCollision();
+            drawFood();
+            drawSnake();
+        }
+        
+        function clearCanvas() {
+            ctx.fillStyle = '#2d2d2d';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        function drawSnake() {
+            ctx.fillStyle = 'lime';
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+            });
+        }
+        
+        function drawFood() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+        }
+        
+        function moveSnake() {
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            snake.unshift(head);
+            if (!hasEatenFood()) {
+                snake.pop();
+            }
+        }
+        
+        function hasEatenFood() {
+            return snake[0].x === food.x && snake[0].y === food.y;
+        }
+        
+        function checkFoodCollision() {
+            if (hasEatenFood()) {
+                score += 10;
+                scoreElement.textContent = `Score: ${score}`;
+                generateFood();
+            }
+        }
+        
+        function generateFood() {
+            food.x = Math.floor(Math.random() * tileCount);
+            food.y = Math.floor(Math.random() * tileCount);
+            
+            // Make sure food doesn't appear on snake
+            snake.forEach(segment => {
+                if (segment.x === food.x && segment.y === food.y) {
+                    generateFood();
+                }
+            });
+        }
+        
+        function hasGameEnded() {
+            // Wall collision
+            if (snake[0].x < 0 || snake[0].x >= tileCount || 
+                snake[0].y < 0 || snake[0].y >= tileCount) {
+                return true;
+            }
+            
+            // Self collision
+            for (let i = 1; i < snake.length; i++) {
+                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function resetGame() {
+            snake = [{x: 10, y: 10}];
+            food = {x: 15, y: 15};
+            dx = 0;
+            dy = 0;
+            score = 0;
+            scoreElement.textContent = `Score: ${score}`;
+            clearInterval(gameLoop);
+            gameLoop = setInterval(drawGame, 100);
+        }
+        
+        // Start game
+        gameLoop = setInterval(drawGame, 100);
+    </script>
+</body>
+</html>

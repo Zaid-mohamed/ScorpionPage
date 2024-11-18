@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Man Hunter</title>
+    <link rel="stylesheet" href="SimpleGame.css">
+    <style>
+        /* Canvas styling */
+        #gameCanvas {
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            background: #2d2d2d;
+        }
+        /* Score display styling */
+        #score {
+            color: white;
+            font-size: 1.5em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(255, 215, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Man Hunter</h1>
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <button id="reset" class="Link" onclick="resetGame()">Reset Game</button>
+    <a href="index.html" class="Link">Back to Home</a>
+
+    <script>
+        // Get canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+
+        // Player object with initial properties
+        let player = {
+            x: canvas.width/2,
+            y: canvas.height/2,
+            radius: 15,
+            speed: 5
+        };
+
+        // Game state variables
+        let zombies = [];
+        let score = 0;
+        let gameLoop;
+        let keys = {};
+
+        // Zombie class definition
+        class Zombie {
+            constructor() {
+                // Randomly choose which side the zombie spawns from
+                const side = Math.floor(Math.random() * 4);
+                switch(side) {
+                    case 0: // top
+                        this.x = Math.random() * canvas.width;
+                        this.y = -20;
+                        break;
+                    case 1: // right
+                        this.x = canvas.width + 20;
+                        this.y = Math.random() * canvas.height;
+                        break;
+                    case 2: // bottom
+                        this.x = Math.random() * canvas.width;
+                        this.y = canvas.height + 20;
+                        break;
+                    case 3: // left
+                        this.x = -20;
+                        this.y = Math.random() * canvas.height;
+                        break;
+                }
+                this.radius = 15;
+                this.speed = 2;
+                this.spawnTime = Date.now();
+            }
+
+            // Update zombie position to move towards player
+            update() {
+                const dx = player.x - this.x;
+                const dy = player.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                this.x += (dx/distance) * this.speed;
+                this.y += (dy/distance) * this.speed;
+            }
+
+            // Draw zombie on canvas
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        // Event listeners for keyboard input
+        document.addEventListener('keydown', (e) => keys[e.key] = true);
+        document.addEventListener('keyup', (e) => keys[e.key] = false);
+
+        // Handle player movement based on keyboard input
+        function movePlayer() {
+            if(keys['ArrowUp'] && player.y > player.radius) player.y -= player.speed;
+            if(keys['ArrowDown'] && player.y < canvas.height - player.radius) player.y += player.speed;
+            if(keys['ArrowLeft'] && player.x > player.radius) player.x -= player.speed;
+            if(keys['ArrowRight'] && player.x < canvas.width - player.radius) player.x += player.speed;
+        }
+
+        // Draw player on canvas
+        function drawPlayer() {
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Randomly spawn new zombies
+        function spawnZombie() {
+            if(Math.random() < 0.005) { // Reduced from 0.02 to 0.005 (25% of original rate)
+                zombies.push(new Zombie());
+            }
+        }
+
+        // Check and remove zombies that have existed for 10 seconds
+        function checkZombies() {
+            const currentTime = Date.now();
+            zombies = zombies.filter(zombie => {
+                const timeSurvived = (currentTime - zombie.spawnTime) / 1000;
+                if(timeSurvived >= 10) {
+                    score += Math.floor(Math.random() * 3) + 1;
+                    scoreElement.textContent = `Score: ${score}`;
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        // Check for collisions between player and zombies
+        function checkCollision() {
+            for(let zombie of zombies) {
+                const dx = player.x - zombie.x;
+                const dy = player.y - zombie.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if(distance < player.radius + zombie.radius) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Main game loop
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            movePlayer();
+            drawPlayer();
+            
+            spawnZombie();
+            
+            zombies.forEach(zombie => {
+                zombie.update();
+                zombie.draw();
+            });
+            
+            checkZombies();
+            
+            if(checkCollision()) {
+                endGame();
+                return;
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // Handle game over state
+        function endGame() {
+            ctx.fillStyle = 'white';
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Game Over!', canvas.width/2, canvas.height/2);
+        }
+
+        // Reset game to initial state
+        function resetGame() {
+            player.x = canvas.width/2;
+            player.y = canvas.height/2;
+            zombies = [];
+            score = 0;
+            scoreElement.textContent = `Score: ${score}`;
+            requestAnimationFrame(update);
+        }
+
+        // Start game
+        resetGame();
+    </script>
+</body>
+</html>

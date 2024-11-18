@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .slide-in {
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container, h2, .skills, .Link, footer {
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in forwards;
+        }
+
+        .container { animation-delay: 0.2s; }
+        h2 { animation-delay: 0.4s; }
+        .skills { animation-delay: 0.6s; }
+        .Link { animation-delay: 0.8s; }
+        footer { animation-delay: 1s; }
+
+        #customizeBtn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background: rgba(255, 215, 0, 0.3);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        #customizeBtn:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        #customizePanel {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            left: 20px;
+            background: rgba(45, 45, 45, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            color: white;
+            z-index: 999;
+        }
+
+        .color-picker {
+            margin: 10px 0;
+        }
+
+        .color-picker label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .color-picker input {
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .button-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 800px;
+        }
+
+        .Link {
+            min-width: 150px;
+            text-align: center;
+            padding: 12px 20px;
+            margin: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .Link:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <button id="customizeBtn" class="Link">Customize Page</button>
+    
+    <div id="customizePanel">
+        <h3 style="margin-top: 0;">Customize Colors</h3>
+        <div class="color-picker">
+            <label for="mainColor">Main Color:</label>
+            <input type="color" id="mainColor" onchange="updateColors()">
+        </div>
+        <div class="color-picker">
+            <label for="trimColor">Trim Color:</label>
+            <input type="color" id="trimColor" onchange="updateColors()">
+        </div>
+        <button class="Link" style="margin-top: 10px;" onclick="toggleCustomizePanel()">Close</button>
+    </div>
+
+    <div class="container">
+        <h1 class="name">Scorpion Dev</h1>
+        <h3 class="description">Game developer creating immersive experiences with Godot Engine.</h3>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        function toggleCustomizePanel() {
+            const panel = document.getElementById('customizePanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateColors() {
+            const mainColor = document.getElementById('mainColor').value;
+            const trimColor = document.getElementById('trimColor').value;
+            document.documentElement.style.setProperty('--main-color', mainColor);
+            document.documentElement.style.setProperty('--trim-color', trimColor);
+        }
+
+        document.getElementById('customizeBtn').addEventListener('click', toggleCustomizePanel);
+    </script>
+
+    <div class="button-section">
+        <h2>My Skills</h2>
+        <ol class="skills">
+            <li>Godot 2 years</li>
+            <li>Unity 0.01 years</li>
+        </ol>
+        
+        <h2>Important Links</h2>
+        <div class="button-group">
+            <a href="https://www.youtube.com/@ScorpionDevYT" class="Link">MyChannel</a>
+            <a href="myGames.html" class="Link">My Games</a>
+            <a href="WhoAmI.html" class="Link">Who Am I?</a>
+            <a href="PeopleHelpedMe.html" class="Link">People Helped Me</a>
+            <a href="MyFriends.html" class="Link">My Friends</a>
+        </div>
+
+        <h2>Entertainment</h2>
+        <div class="button-group">
+            <a href="SimpleGame.html" class="Link">Tic Tac Toe</a>
+            <a href="SnakeGame.html" class="Link">Snake Game</a>
+            <a href="ManHunter.html" class="Link">Man Hunter</a>
+            <a href="FlappyBird.html" class="Link">Flappy Bird</a>
+        </div>
+
+        <h2>Important Text</h2>
+        <div class="button-group">
+            <a href="ImportantText.html" class="Link">Important Text</a>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 50px; padding: 20px; color: #666; font-size: 0.8em;">
+        <p>© 2024 Scorpion Dev. All rights reserved.</p>
+        <p>This website and its contents are protected by copyright law. Any unauthorized reproduction or distribution of this website, or any portion of it, may result in severe civil and criminal penalties.</p>
+    </footer>
+</body>
+</html>

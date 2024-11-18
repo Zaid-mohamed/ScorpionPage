@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Friends</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .Title {
+            color: white;
+            text-align: center;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin: 40px 0;
+            text-shadow: 
+                0 0 10px rgba(255,255,255,0.5),
+                0 0 20px rgba(255,255,255,0.3),
+                0 0 30px rgba(255,255,255,0.2);
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .friend-article {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .friend-article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,215,0,0.1);
+        }
+
+        .friend-name {
+            color: goldenrod;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid goldenrod;
+            padding-bottom: 10px;
+        }
+
+        .friend-passion {
+            color: #e6e6e6;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .friend-description {
+            color: #cccccc;
+            text-align: justify;
+            padding: 10px 0;
+        }
+
+        .BackButton {
+            display: block;
+            width: fit-content;
+            margin: 40px auto;
+            padding: 10px 20px;
+            background-color: #1E1E1E;
+            color: goldenrod;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .BackButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 
+                    0 0 10px rgba(255, 215, 0, 0.5),
+                    0 0 20px rgba(255, 215, 0, 0.3),
+                    0 0 30px rgba(255, 215, 0, 0.2);
+            }
+            to {
+                text-shadow: 
+                    0 0 20px rgba(255, 215, 0, 0.6),
+                    0 0 30px rgba(255, 215, 0, 0.4),
+                    0 0 40px rgba(255, 215, 0, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="Title">My Friends</h1>
+
+    <article class="friend-article">
+        <h2 class="friend-name">Eyad</h2>
+        <p class="friend-passion">Web Designer</p>
+        <p class="friend-description">
+            Eyad is a talented web designer who brings creativity and innovation to every project. His keen eye for design and understanding of user experience makes him an exceptional professional in his field. His passion for web design shows in the beautiful and functional websites he creates.
+        </p>
+    </article>
+
+    <article class="friend-article">
+        <h2 class="friend-name">Ziad</h2>
+        <p class="friend-passion">Aspiring Web Designer</p>
+        <p class="friend-description">
+            Ziad has a burning desire to become a web designer. His determination and enthusiasm for learning new design concepts and technologies is inspiring. He's constantly working on improving his skills and staying up-to-date with the latest web design trends.
+        </p>
+    </article>
+
+    <article class="friend-article">
+        <h2 class="friend-name">Fares</h2>
+        <p class="friend-passion">Future Engineer</p>
+        <p class="friend-description">
+            Fares dreams of becoming an engineer, and his analytical mindset and problem-solving abilities make him perfect for this path. He approaches challenges with creativity and determination, always seeking innovative solutions to complex problems.
+        </p>
+    </article>
+
+    <article class="friend-article">
+        <h2 class="friend-name">Karim</h2>
+        <p class="friend-passion">Artistic Brother</p>
+        <p class="friend-description">
+            Karim, my brother, has an incredible talent for drawing. His artistic abilities never cease to amaze those around him. Whether it's sketching, digital art, or exploring new artistic mediums, his creativity knows no bounds. His passion for art brings color and joy to our family.
+        </p>
+    </article>
+
+    <a href="index.html" class="BackButton">Back to Home</a>
+</body>
+</html>
